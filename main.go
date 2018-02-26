@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -9,6 +10,9 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"strings"
+	"syscall"
 	"time"
 )
 
@@ -31,7 +35,9 @@ var (
 		"badluck":    0.9,
 		"invincible": 1,
 	}
-	imReady bool = false
+	// reverse chance - if true container will survive instead of crash with the defined probability
+	reverseChance bool = false
+	imReady       bool = false
 )
 
 type meta struct {
@@ -83,10 +89,14 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getReady(delayType string) {
-	d := initdelay[delayType]
-	time.Sleep(time.Duration(d) * time.Second)
-	imReady = true
-	fmt.Printf("Ready after delay type '%s' of %.2fs\n", delayType, d)
+	if d, ok := initdelay[delayType]; ok {
+		fmt.Printf("Preparing (delay type='%s', duration=%.2fs)\n", delayType, d)
+		time.Sleep(time.Duration(d) * time.Second)
+		imReady = true
+		fmt.Printf("Ready!\n")
+	} else {
+		panic(fmt.Sprintf("Invalid delay type: %s", delayType))
+	}
 }
 
 func crashMe(crashChanceType string) {
@@ -100,10 +110,14 @@ func crashMe(crashChanceType string) {
 			src := rand.NewSource(time.Now().UnixNano())
 			rnd := rand.New(src)
 			r := rnd.Float32()
-			if r < chance {
-				panic(fmt.Sprintf("Killed! (drawn=%f, chance=%s, probability=%f)\n", r, crashChanceType, chance))
+			c := chance
+			if reverseChance {
+				c = 1 - chance
+			}
+			if r < c {
+				panic(fmt.Sprintf("Killed! (drawn=%f, chance=%s, probability=%f)\n", r, crashChanceType, c))
 			} else {
-				fmt.Printf("Missed - lucky you :-) (drawn=%f, chance=%s, probability=%f)\n", r, crashChanceType, chance)
+				fmt.Printf("Missed - lucky you :-) (drawn=%f, chance=%s, probability=%f)\n", r, crashChanceType, c)
 				return
 				// i += 1
 				// time.Sleep(20 * time.Millisecond)
@@ -128,15 +142,50 @@ func jsonHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", string(cj))
 }
 
+func configFromEnv(key string) (string, error) {
+	for _, e := range os.Environ() {
+		pair := strings.Split(e, "=")
+		if strings.ToLower(pair[0]) == key {
+			return pair[1], nil
+		}
+	}
+	return "", errors.New(fmt.Sprintf("Key %s not found in environment variables", key))
+}
+
+func sigHandler(sigs chan os.Signal, done chan bool) {
+	sig := <-sigs
+	fmt.Printf("Received and handling signal %s\n", sig)
+	done <- true
+	os.Exit(0)
+}
+
 func main() {
 	conMeta.newMeta()
 	conMeta.getIp()
 	counter = 0
-	delay := flag.String("delay", "bolt", fmt.Sprintf("delay type: zero, bolt, veyron, lovejava"))
-	crash := flag.String("crash", "lotto", fmt.Sprintf("crash type: lotto, coin, badluck, invincible"))
+
+	delay, err1 := configFromEnv("delay")
+	if err1 != nil {
+		flag.StringVar(&delay, "delay", "bolt", fmt.Sprintf("delay type: zero, bolt, veyron, lovejava"))
+	}
+	crash, err2 := configFromEnv("crash")
+	if err2 != nil {
+		flag.StringVar(&crash, "crash", "lotto", fmt.Sprintf("crash type: lotto, coin, badluck, invincible"))
+	}
+
+	flag.BoolVar(&reverseChance, "reverse", reverseChance, fmt.Sprintf("reverse action - survive instead of crash with defined probability"))
+
 	flag.Parse()
-	go getReady(*delay)
-	go crashMe(*crash)
+	go getReady(delay)
+	go crashMe(crash)
+
+	sigs := make(chan os.Signal, 1)
+	done := make(chan bool, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+
+	go sigHandler(sigs, done)
+
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/", handler)
 	// http.HandleFunc("/json", jsonHandler)

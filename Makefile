@@ -1,12 +1,12 @@
 SHELL := /bin/bash
-NAME = kittle-container
+NAME = cloudowski/kittle-container
 
 #VERSION?=$(shell git describe --tags --always)
 VERSION?=latest
 
 all: clean build
 
-.PHONY: build tinybuild run runfg clean
+.PHONY: build tinybuild run runfg clean push
 default: build
 
 build: 
@@ -14,6 +14,9 @@ build:
 
 tinybuild: 
 	docker build -f Dockerfile.multistage -t $(NAME):$(VERSION) .
+
+push: tinybuild
+	docker push $(NAME):$(VERSION)
 
 run: 
 	docker run -p 8080:8080 --name=$(NAME) -d $(NAME):$(VERSION)

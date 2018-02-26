@@ -1,0 +1,84 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-1
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-2
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-3
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-4
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-5
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lottery
+  name: lottery-6
+spec:
+  containers:
+  - image: cloudowski/kittle-container:latest
+    imagePullPolicy: Always
+    name: kittle
+    args: [ "-crash=coin", "-delay=zero" ]
+  restartPolicy: Never
