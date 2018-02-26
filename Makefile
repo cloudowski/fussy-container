@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-NAME = cloudowski/kittle-container
+NAME = cloudowski/fussy-container
 
 #VERSION?=$(shell git describe --tags --always)
 VERSION?=latest

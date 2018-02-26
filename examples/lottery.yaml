@@ -10,7 +10,17 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -24,7 +34,17 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -38,7 +58,17 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -52,7 +82,17 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -66,7 +106,17 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
 ---
 apiVersion: v1
@@ -80,5 +130,15 @@ spec:
   - image: cloudowski/kittle-container:latest
     imagePullPolicy: Always
     name: kittle
-    args: [ "-crash=coin", "-delay=zero" ]
+    args: [ "-crash=coin", "-delay=bolt", "-reverse=false" ]
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /health
+        port: 8080
+        scheme: HTTP
+      initialDelaySeconds: 0
+      periodSeconds: 2
+      successThreshold: 1
+      timeoutSeconds: 1
   restartPolicy: Never
