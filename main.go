@@ -186,7 +186,7 @@ func main() {
 
 	go sigHandler(sigs, done)
 
-	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/healthz", healthHandler)
 	http.HandleFunc("/", handler)
 	// http.HandleFunc("/json", jsonHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
