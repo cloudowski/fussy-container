@@ -33,7 +33,7 @@ var (
 		"lotto":      float32(1.0 / 49.0),
 		"coin":       0.5,
 		"badluck":    0.9,
-		"invincible": 1,
+		"invincible": 0,
 	}
 	// reverse chance - if true container will survive instead of crash with the defined probability
 	reverseChance bool = false
