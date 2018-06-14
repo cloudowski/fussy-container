@@ -1,4 +1,5 @@
 FROM golang:alpine
+
 COPY . /src
 RUN cd /src &&\
     go build -o goapp
