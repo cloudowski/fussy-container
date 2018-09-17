@@ -1,0 +1,15 @@
+replicas: 1
+image:
+  repository: cloudowski/fussy-container
+  tag: 0.4
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - fussy.192.168.99.100.nip.io
+
