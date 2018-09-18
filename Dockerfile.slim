@@ -1,0 +1,10 @@
+FROM golang:alpine AS build-env
+ADD . /src
+WORKDIR /src
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o goapp
+
+FROM scratch
+WORKDIR /app
+COPY --from=build-env /src/goapp /app/
+EXPOSE 8080
+ENTRYPOINT [ "/app/goapp" ]
