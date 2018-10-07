@@ -13,7 +13,7 @@ build:
 	docker build -t $(NAME):$(VERSION) .
 
 tinybuild: 
-	docker build -f Dockerfile.multistage -t $(NAME):$(VERSION) .
+	docker build -f Dockerfile.slim -t $(NAME):$(VERSION) .
 
 push: tinybuild
 	docker push $(NAME):$(VERSION)
