@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 NAME = cloudowski/fussy-container
 
-VERSION?=$(shell git describe --tags --always)
+VERSION?=$(shell git tag -l --points-at HEAD)
 #VERSION?=latest
 
 all: clean build
