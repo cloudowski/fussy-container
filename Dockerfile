@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM golang:1.13-alpine
 
 COPY . /src
 RUN cd /src &&\
